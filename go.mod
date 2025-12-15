@@ -1,4 +1,4 @@
-module github.com/namjunjeong/Smart-Bollard-System
+module github.com/namjunjeong/MWSP-final-smart-bollard-system-blog
 
 go 1.20
 
