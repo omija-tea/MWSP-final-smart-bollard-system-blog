@@ -1,39 +1,40 @@
 # =====================================
-# Django / Python - PhotoBlogServer
+# Django / Python - Service_System
 # =====================================
-PhotoBlogServer/*.log
-PhotoBlogServer/*.pot
-PhotoBlogServer/*.py[cod]
+Service_System/*.log
+Service_System/*.pot
+Service_System/*.py[cod]
 **/__pycache__/
-PhotoBlogServer/**/*.py[cod]
-PhotoBlogServer/local_settings.py
-PhotoBlogServer/db.sqlite3
-PhotoBlogServer/db.sqlite3-journal
-PhotoBlogServer/media/
-PhotoBlogServer/.env
-PhotoBlogServer/.venv/
-PhotoBlogServer/env/
-PhotoBlogServer/venv/
-PhotoBlogServer/ENV/
-PhotoBlogServer/env.bak/
-PhotoBlogServer/venv.bak/
-PhotoBlogServer/.idea/
+Service_System/**/*.py[cod]
+Service_System/local_settings.py
+Service_System/db.sqlite3
+Service_System/db.sqlite3-journal
+Service_System/media/
+Service_System/.env
+Service_System/.venv/
+Service_System/env/
+Service_System/venv/
+Service_System/ENV/
+Service_System/env.bak/
+Service_System/venv.bak/
+Service_System/.idea/
 # 기타 캐시/빌드 관련 제외
-PhotoBlogServer/build/
-PhotoBlogServer/.mypy_cache/
-PhotoBlogServer/.pyre/
-PhotoBlogServer/cython_debug/
+Service_System/build/
+Service_System/.mypy_cache/
+Service_System/.pyre/
+Service_System/cython_debug/
+Service_System/media/
 
 # =====================================
-# Android / Flutter - PhotoViewer
+# Android / Flutter - Client_System
 # =====================================
-PhotoViewer/build/
-PhotoViewer/.gradle/
-PhotoViewer/.cxx/
-PhotoViewer/.externalNativeBuild/
-PhotoViewer/local.properties
-PhotoViewer/.idea/
-PhotoViewer/.DS_Store
+Client_System/build/
+Client_System/.gradle/
+Client_System/.cxx/
+Client_System/.externalNativeBuild/
+Client_System/local.properties
+Client_System/.idea/
+Client_System/.DS_Store
 
 # =====================================
 # 공통
