@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>게시물 편집</title>
+    <style>
+        img.preview { max-width: 400px; height: auto; display: block; margin: 0.5rem 0; }
+        form { max-width: 800px; }
+    </style>
+</head>
+<body>
+    <h1>게시물 편집</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% if form.instance.pk and form.instance.image %}
+            <div>
+                현재 이미지:<br>
+                <img src="{{ form.instance.image.url }}" alt="current image" class="preview">
+            </div>
+        {% endif %}
+
+        <p>
+            <strong>작성자:</strong>
+            {{ form.instance.author.get_username }} (id: {{ form.instance.author.pk }})
+        </p>
+
+        {{ form.as_p }}
+
+        <button type="submit">저장</button>
+        <a href="{% url 'post_list' %}">취소</a>
+    </form>
+</body>
+</html>

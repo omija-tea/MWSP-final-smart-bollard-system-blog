@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>{{ post.title }}</title>
+    <style>
+        img.full { max-width: 800px; height: auto; display: block; margin: 1rem 0; }
+    </style>
+</head>
+<body>
+    <h1>{{ post.title }}</h1>
+    <div>
+        작성: {{ post.created_date|date:"Y-m-d H:i" }}
+        {% if post.published_date %} | 게시: {{ post.published_date|date:"Y-m-d H:i" }}{% endif %}
+        {% if post.author %} | 작성자: {{ post.author.get_username }}{% endif %}
+    </div>
+
+    {% if post.image %}
+        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="full">
+    {% endif %}
+
+    <div>
+        {{ post.text|linebreaks }}
+    </div>
+
+    <p>
+        <a href="{% url 'post_edit' pk=post.pk %}">편집</a> |
+        <a href="{% url 'post_list' %}">목록으로</a>
+    </p>
+</body>
+</html>
+

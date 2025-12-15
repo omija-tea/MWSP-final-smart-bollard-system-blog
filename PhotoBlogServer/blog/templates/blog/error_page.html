@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>오류</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 2rem; }
+        .box { max-width: 800px; border: 1px solid #e74c3c; background: #fff7f7; padding: 1rem 1.5rem; border-radius: 6px; }
+        .msg { color: #c0392b; white-space: pre-wrap; }
+        a { display: inline-block; margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>오류가 발생했습니다</h1>
+        <div class="msg">{{ error_message }}</div>
+        <p><a href="{% url 'post_list' %}">목록으로 돌아가기</a></p>
+    </div>
+</body>
+</html>
+

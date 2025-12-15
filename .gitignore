@@ -1,0 +1,43 @@
+# =====================================
+# Django / Python - PhotoBlogServer
+# =====================================
+PhotoBlogServer/*.log
+PhotoBlogServer/*.pot
+PhotoBlogServer/*.py[cod]
+**/__pycache__/
+PhotoBlogServer/**/*.py[cod]
+PhotoBlogServer/local_settings.py
+PhotoBlogServer/db.sqlite3
+PhotoBlogServer/db.sqlite3-journal
+PhotoBlogServer/media/
+PhotoBlogServer/.env
+PhotoBlogServer/.venv/
+PhotoBlogServer/env/
+PhotoBlogServer/venv/
+PhotoBlogServer/ENV/
+PhotoBlogServer/env.bak/
+PhotoBlogServer/venv.bak/
+PhotoBlogServer/.idea/
+# 기타 캐시/빌드 관련 제외
+PhotoBlogServer/build/
+PhotoBlogServer/.mypy_cache/
+PhotoBlogServer/.pyre/
+PhotoBlogServer/cython_debug/
+
+# =====================================
+# Android / Flutter - PhotoViewer
+# =====================================
+PhotoViewer/build/
+PhotoViewer/.gradle/
+PhotoViewer/.cxx/
+PhotoViewer/.externalNativeBuild/
+PhotoViewer/local.properties
+PhotoViewer/.idea/
+PhotoViewer/.DS_Store
+
+# =====================================
+# 공통
+# =====================================
+*.log
+.DS_Store
+.idea/

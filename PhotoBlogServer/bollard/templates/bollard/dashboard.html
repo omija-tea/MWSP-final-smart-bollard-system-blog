@@ -1,0 +1,112 @@
+{% extends 'bollard/base.html' %}
+
+{% block title %}볼라드 대시보드{% endblock %}
+
+{% block content %}
+<!-- 현재 상태 카드 -->
+<div class="card">
+    <h2>📊 시스템 상태</h2>
+    <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; text-align: center;">
+        <div
+            style="padding: 20px; background: {% if state.is_closed %}#f8d7da{% else %}#d4edda{% endif %}; border-radius: 10px;">
+            <div style="font-size: 2em;">{% if state.is_closed %}🔒{% else %}🔓{% endif %}</div>
+            <div style="font-weight: bold; margin-top: 10px;">
+                {% if state.is_closed %}닫힘{% else %}열림{% endif %}
+            </div>
+        </div>
+        <div
+            style="padding: 20px; background: {% if state.manual_mode %}#fff3cd{% else %}#cce5ff{% endif %}; border-radius: 10px;">
+            <div style="font-size: 2em;">{% if state.manual_mode %}🎮{% else %}🤖{% endif %}</div>
+            <div style="font-weight: bold; margin-top: 10px;">
+                {% if state.manual_mode %}수동 모드{% else %}자동 모드{% endif %}
+            </div>
+        </div>
+        <div
+            style="padding: 20px; background: {% if setting.is_active %}#d4edda{% else %}#f8d7da{% endif %}; border-radius: 10px;">
+            <div style="font-size: 2em;">{% if setting.is_active %}✅{% else %}⏹️{% endif %}</div>
+            <div style="font-weight: bold; margin-top: 10px;">
+                {% if setting.is_active %}시스템 활성{% else %}시스템 비활성{% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 설정 요약 -->
+<div class="card">
+    <h2>⚙️ 현재 설정</h2>
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 10px;">점유율 기준</td>
+            <td style="padding: 10px; font-weight: bold;">{{ setting.occupy_ratio }}%</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 10px;">유지 프레임</td>
+            <td style="padding: 10px; font-weight: bold;">{{ setting.maintain_frame }}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 10px;">감지 대상</td>
+            <td style="padding: 10px; font-weight: bold;">Class ID {{ setting.target_object }} (오토바이)</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px;">라즈베리파이</td>
+            <td style="padding: 10px; font-weight: bold;">{{ setting.raspberry_pi_host }}:{{ setting.raspberry_pi_port
+                }}</td>
+        </tr>
+    </table>
+</div>
+
+<!-- 최근 감지 로그 -->
+<div class="card">
+    <h2>📜 최근 이벤트 로그</h2>
+    {% if recent_logs %}
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                <th style="padding: 10px; text-align: left;">시간</th>
+                <th style="padding: 10px; text-align: left;">감지</th>
+                <th style="padding: 10px; text-align: left;">점유율</th>
+                <th style="padding: 10px; text-align: left;">동작</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in recent_logs %}
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px;">{{ log.timestamp|date:"m/d H:i:s" }}</td>
+                <td style="padding: 10px;">
+                    {% if log.detected %}
+                    <span style="color: #dc3545;">⚠️ 감지</span>
+                    {% else %}
+                    <span style="color: #28a745;">✅ 미감지</span>
+                    {% endif %}
+                </td>
+                <td style="padding: 10px;">{{ log.occupy_ratio_actual|floatformat:1 }}%</td>
+                <td style="padding: 10px;">
+                    {% if log.action == 'open' %}
+                    <span style="color: #28a745;">🔓 열림</span>
+                    {% elif log.action == 'close' %}
+                    <span style="color: #dc3545;">🔒 닫힘</span>
+                    {% else %}
+                    <span style="color: #6c757d;">— 변화없음</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="color: #666; text-align: center; padding: 20px;">
+        아직 감지 로그가 없습니다.
+    </p>
+    {% endif %}
+</div>
+
+<!-- 빠른 액션 -->
+<div class="card">
+    <h2>⚡ 빠른 액션</h2>
+    <div class="button-group">
+        <a href="{% url 'bollard_setting' %}" class="btn btn-primary">⚙️ 설정 변경</a>
+        <a href="{% url 'post_list' %}" class="btn btn-secondary">📸 블로그 보기</a>
+    </div>
+</div>
+{% endblock %}

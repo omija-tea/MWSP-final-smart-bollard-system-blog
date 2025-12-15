@@ -1,0 +1,139 @@
+{% extends 'bollard/base.html' %}
+
+{% block title %}볼라드 설정{% endblock %}
+
+{% block content %}
+{% if message %}
+<div class="message success">{{ message }}</div>
+{% endif %}
+
+{% if system_status == "stop" %}
+<form method="post">
+    {% csrf_token %}
+
+    <!-- 볼라드 수동 조작 -->
+    <div class="card">
+        <h2>🎮 볼라드 수동 조작</h2>
+        <div class="button-group">
+            <button type="submit" name="action" value="bopen" class="btn btn-success">
+                🔓 볼라드 열기
+            </button>
+            <button type="submit" name="action" value="bclose" class="btn btn-danger">
+                🔒 볼라드 닫기
+            </button>
+        </div>
+    </div>
+
+    <!-- 서버 설정 -->
+    <div class="card">
+        <h2>⚙️ 서버 설정</h2>
+
+        <div class="form-group">
+            <label for="occupy_ratio">오토바이 차지 영역 퍼센트 (%)</label>
+            <input type="number" id="occupy_ratio" name="occupy_ratio" placeholder="{{ setting.occupy_ratio }}"
+                value="{{ setting.occupy_ratio }}" min="1" max="100">
+        </div>
+
+        <div class="form-group">
+            <label for="maintain_frame">볼라드 폐쇄 유지 프레임</label>
+            <input type="number" id="maintain_frame" name="maintain_frame" placeholder="{{ setting.maintain_frame }}"
+                value="{{ setting.maintain_frame }}" min="1">
+        </div>
+
+        <div class="form-group">
+            <label for="target_object">감지대상 번호 (COCO Class ID)</label>
+            <input type="number" id="target_object" name="target_object" value="{{ setting.target_object }}" min="0">
+            <small style="color: #666;">3 = 오토바이 (motorcycle)</small>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" name="action" value="server" class="btn btn-primary">
+                💾 설정 저장
+            </button>
+        </div>
+    </div>
+
+    <!-- 시스템 구동 -->
+    <div class="card">
+        <h2>🚀 시스템 구동</h2>
+        <div class="button-group">
+            <button type="submit" name="action" value="run_bollard" class="btn btn-success">
+                ▶️ 시스템 시작
+            </button>
+        </div>
+    </div>
+
+    <!-- 로그아웃 -->
+    <div class="card">
+        <div class="button-group">
+            <a href="{% url 'admin:logout' %}" class="btn btn-secondary">
+                🚪 로그아웃
+            </a>
+        </div>
+    </div>
+</form>
+
+{% else %}
+<!-- 시스템 동작 중 -->
+<form method="post">
+    {% csrf_token %}
+
+    <div class="card">
+        <h2>
+            🚧 볼라드 동작중
+            <span class="status-indicator status-running">RUNNING</span>
+        </h2>
+
+        <p style="margin-bottom: 20px; color: #666;">
+            현재 시스템이 자동 모드로 동작 중입니다.<br>
+            오토바이 감지 시 자동으로 볼라드가 제어됩니다.
+        </p>
+
+        <div class="button-group">
+            <button type="submit" name="action" value="stop_bollard" class="btn btn-danger">
+                ⏹️ 시스템 정지
+            </button>
+        </div>
+    </div>
+</form>
+{% endif %}
+
+<!-- 현재 상태 정보 -->
+<div class="card">
+    <h2>📊 현재 상태</h2>
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 10px; font-weight: bold;">볼라드 상태</td>
+            <td style="padding: 10px;">
+                {% if state.is_closed %}
+                <span style="color: #dc3545;">🔒 닫힘</span>
+                {% else %}
+                <span style="color: #28a745;">🔓 열림</span>
+                {% endif %}
+            </td>
+        </tr>
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 10px; font-weight: bold;">제어 모드</td>
+            <td style="padding: 10px;">
+                {% if state.manual_mode %}
+                <span style="color: #ffc107;">⚠️ 수동</span>
+                {% else %}
+                <span style="color: #667eea;">🤖 자동</span>
+                {% endif %}
+            </td>
+        </tr>
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 10px; font-weight: bold;">유지 프레임 카운터</td>
+            <td style="padding: 10px;">{{ state.counter }}</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 10px; font-weight: bold;">점유율 기준</td>
+            <td style="padding: 10px;">{{ setting.occupy_ratio }}%</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; font-weight: bold;">라즈베리파이 주소</td>
+            <td style="padding: 10px;">{{ setting.raspberry_pi_host }}:{{ setting.raspberry_pi_port }}</td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

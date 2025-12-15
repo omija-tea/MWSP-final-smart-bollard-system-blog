@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>게시물 목록</title>
+    <style>
+        .thumb { max-width: 150px; max-height: 120px; object-fit: cover; }
+        .post-item { margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <h1>게시물 목록</h1>
+    <p><a href="{% url 'post_new' %}">새 게시물 작성</a> | <a href="{% url 'js_test' %}">JS 테스트</a></p>
+
+    {% if posts %}
+        <ul>
+        {% for post in posts %}
+            <li class="post-item">
+                <a href="{% url 'post_detail' pk=post.pk %}"><strong>{{ post.title }}</strong></a>
+                {% if post.image %}
+                    <br><img src="{{ post.image.url }}" alt="{{ post.title }}" class="thumb">
+                {% endif %}
+                <div>
+                    작성: {{ post.created_date|date:"Y-m-d H:i" }}
+                    {% if post.published_date %} | 게시: {{ post.published_date|date:"Y-m-d H:i" }}{% endif %}
+                    {% if post.author %} | 작성자: {{ post.author.get_username }}{% endif %}
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>게시물이 없습니다.</p>
+    {% endif %}
+</body>
+</html>
+
