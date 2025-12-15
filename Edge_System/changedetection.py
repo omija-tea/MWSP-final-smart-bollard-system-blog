@@ -22,7 +22,7 @@ class ChangeDetection:
     # 볼라드 API 설정
     BOLLARD_API_ENABLED = os.getenv("BOLLARD_API_ENABLED", "true").lower() == "true"
     last_bollard_send_time = 0
-    BOLLARD_SEND_INTERVAL = 0.25
+    BOLLARD_SEND_INTERVAL = 1
 
     def __init__(self, names):
         self.result_prev = [0 for i in range(len(names))]
@@ -59,18 +59,34 @@ class ChangeDetection:
         now.isoformat()
 
         today = datetime.datetime.now()
-        save_path = os.getcwd() / save_dir / "detected" / str(today.year) / str(today.month) / str(today.day)
+        save_path = (
+            os.getcwd()
+            / save_dir
+            / "detected"
+            / str(today.year)
+            / str(today.month)
+            / str(today.day)
+        )
         pathlib.Path(save_path).mkdir(parents=True, exist_ok=True)
 
-        full_path = save_path / "{0}-{1}-{2}-{3}.jpg".format(today.hour, today.minute, today.second, today.microsecond)
+        full_path = save_path / "{0}-{1}-{2}-{3}.jpg".format(
+            today.hour, today.minute, today.second, today.microsecond
+        )
         dst = cv2.resize(image, dsize=(320, 240), interpolation=cv2.INTER_AREA)
         cv2.imwrite(full_path, dst)
         # 인증이 필요한 요청에 아래의 headers를 붙임
         headers = {"Authorization": f"Token {self.token}", "Accept": "application/json"}
         # Post Create
-        data = {"title": self.title, "text": self.text, "created_date": now, "published_date": now}
+        data = {
+            "title": self.title,
+            "text": self.text,
+            "created_date": now,
+            "published_date": now,
+        }
         file = {"image": open(full_path, "rb")}
-        res = requests.post(self.HOST + "/api_root/Post/", data=data, files=file, headers=headers)
+        res = requests.post(
+            self.HOST + "/api_root/Post/", data=data, files=file, headers=headers
+        )
         print(res)
 
     def send_to_bollard_api(self, detections, image):
@@ -78,7 +94,10 @@ class ChangeDetection:
         if not self.token or not self.HOST:
             return
 
-        headers = {"Authorization": f"Token {self.token}", "Content-Type": "application/json"}
+        headers = {
+            "Authorization": f"Token {self.token}",
+            "Content-Type": "application/json",
+        }
 
         height, width = image.shape[:2]
 
@@ -102,6 +121,11 @@ class ChangeDetection:
             payload["image"] = image_base64
 
         try:
-            requests.post(self.HOST + "/api/bollard/detection/", json=payload, headers=headers, timeout=1)
+            requests.post(
+                self.HOST + "/api/bollard/detection/",
+                json=payload,
+                headers=headers,
+                timeout=1,
+            )
         except:
             pass
